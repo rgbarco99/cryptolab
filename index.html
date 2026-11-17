@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CryptoLab</title>
+  <meta name="description" content="Laboratorio visual de criptografía: cifra, descifra e intenta romper cifrados clásicos y modernos.">
+  <script>
+    /* Tema compartido con el portfolio (misma clave) — antes de pintar para evitar parpadeo */
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem('portfolio-theme'); } catch (e) {}
+      if (!t) t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <a class="brand" href="./">
+      <span class="brand-mark" aria-hidden="true">⌬</span>
+      <span>Crypto<span class="grad">Lab</span></span>
+    </a>
+    <div class="topbar-actions">
+      <a class="ghost-link" href="../projects.html">← Portfolio</a>
+      <button id="theme-toggle" class="icon-btn" aria-label="Cambiar tema" title="Cambiar tema">
+        <span class="i-sun" aria-hidden="true">☀</span><span class="i-moon" aria-hidden="true">☾</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ── Selector: familias + cifrados ─────────────────────────────── -->
+  <nav class="picker" aria-label="Cifrados">
+    <div class="groups" id="groups" role="tablist"></div>
+    <div class="ciphers" id="ciphers"></div>
+  </nav>
+
+  <main class="stage" id="stage">
+
+    <!-- Cabecera del cifrado -->
+    <section class="cipher-head">
+      <div class="cipher-title-row">
+        <div>
+          <p class="cipher-era" id="cipher-era"></p>
+          <h1 class="cipher-name" id="cipher-name"></h1>
+          <p class="cipher-tagline" id="cipher-tagline"></p>
+        </div>
+        <div class="strength" id="strength" title="Resistencia frente a ataques">
+          <span class="strength-label">Resistencia</span>
+          <div class="strength-bars" id="strength-bars"></div>
+          <span class="strength-text" id="strength-text"></span>
+        </div>
+      </div>
+      <button class="how-toggle" id="how-toggle" aria-expanded="false" aria-controls="how">
+        ¿Cómo funciona? <span class="chev" aria-hidden="true">▾</span>
+      </button>
+      <div class="how" id="how" hidden></div>
+    </section>
+
+    <!-- Visualización propia del cifrado -->
+    <section class="visual" id="visual" aria-label="Visualización"></section>
+
+    <!-- Clave -->
+    <section class="key-row" id="key-row"></section>
+
+    <!-- Traductor -->
+    <section class="translator">
+      <div class="pane">
+        <div class="pane-head">
+          <span class="pane-label" id="in-label">Texto claro</span>
+          <span class="counter" id="counter">0 / 5000</span>
+        </div>
+        <textarea id="input" maxlength="5000" spellcheck="false" placeholder="Escribe aquí tu mensaje…"></textarea>
+        <div class="pane-foot">
+          <button class="mini-btn" id="clear-btn" title="Borrar">🗑 Borrar</button>
+        </div>
+      </div>
+
+      <button class="swap" id="swap" title="Intercambiar cifrar ⇄ descifrar" aria-label="Intercambiar">⇄</button>
+
+      <div class="pane pane-out" id="pane-out">
+        <div class="pane-head">
+          <span class="pane-label" id="out-label">Texto cifrado</span>
+          <span class="out-status" id="out-status"></span>
+        </div>
+        <textarea id="output" readonly spellcheck="false" placeholder="Aquí aparecerá el resultado"></textarea>
+        <div class="pane-foot">
+          <button class="mini-btn" id="copy-btn">📋 Copiar</button>
+          <button class="mini-btn" id="share-btn">🔗 Compartir</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Acciones -->
+    <section class="actions">
+      <button class="btn btn-primary" id="run-btn">🔒 Cifrar</button>
+      <button class="btn btn-attack" id="crack-btn">⚡ Romper</button>
+    </section>
+
+    <!-- Consola de ataque -->
+    <section class="console" id="console" hidden aria-live="polite">
+      <div class="console-bar">
+        <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="console-title" id="console-title">ataque</span>
+        <button class="console-btn" id="stop-btn">⏹ Detener</button>
+        <button class="console-btn" id="close-console" aria-label="Cerrar consola">✕</button>
+      </div>
+      <div class="console-stats">
+        <div><span>Intentos</span><b id="st-tries">0</b></div>
+        <div><span>Espacio de claves</span><b id="st-space">—</b></div>
+        <div><span>Tiempo</span><b id="st-time">0,0 s</b></div>
+        <div><span>Estimación real</span><b id="st-eta">—</b></div>
+      </div>
+      <div class="progress"><div class="progress-fill" id="progress"></div></div>
+      <pre class="console-log" id="console-log"></pre>
+    </section>
+
+  </main>
+
+  <footer class="foot">
+    Hecho por <a href="../">Rubén García Barco</a>
+  </footer>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
