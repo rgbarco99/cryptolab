@@ -47,3 +47,7 @@ node tests/ciphers.test.js
 ```
 
 Incluyen vectores de referencia (`ATTACKATDAWN` + `LEMON` → `LXFOPVEFRNHR` en Vigenère; Enigma I-II-III en `AAA`: `AAAAA` → `BDZGO`; SHA-256 de `abc`), el doble paso del rotor central de Enigma y que cada ataque recupere la clave.
+
+## Publicar una versión nueva
+
+GitHub Pages deja que el navegador guarde los archivos 10 minutos (`Cache-Control: max-age=600`). Si cambias el JS o el CSS, **sube el número `?v=` de los `<link>` y `<script>` en `index.html`**: así nadie recibe una mezcla de archivos nuevos y viejos.
